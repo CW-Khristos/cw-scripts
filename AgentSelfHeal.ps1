@@ -11,7 +11,7 @@ $GoodServerBackupExists = Test-Path $AgentConfigPath\ServerConfig.xml.Good -Path
 [xml]$XmlServer = Get-Content -LiteralPath $AgentConfigPath\ServerConfig.xml
 $ApplianceID = $XmlAppliance.ApplianceConfig.ApplianceID
 $BackupServerIP = $XmlServer.ServerConfig.BackupServerIP
-If ($ApplianceID -ne -1) {
+If (($ApplianceID -ne -1) -And ($applianceID -ne NULL)) {
   Copy-Item -LiteralPath $AgentConfigPath\ApplianceConfig.xml -Destination $AgentConfigPath\ApplianceConfig.xml.Good -Force
   Write-Host {Backed up ApplianceConfig.xml}
   If ($BackupServerIP -ne "localhost") {

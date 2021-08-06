@@ -1,4 +1,4 @@
-﻿# WINDOWS AGENT SELF-HEALING
+# WINDOWS AGENT SELF-HEALING
 If (${env:ProgramFiles(x86)}) {
   $ProgramFilesPath = ${env:ProgramFiles(x86)}
 } Else {
@@ -11,10 +11,10 @@ $GoodServerBackupExists = Test-Path $AgentConfigPath\ServerConfig.xml.Good -Path
 [xml]$XmlServer = Get-Content -LiteralPath $AgentConfigPath\ServerConfig.xml
 $ApplianceID = $XmlAppliance.ApplianceConfig.ApplianceID
 $BackupServerIP = $XmlServer.ServerConfig.BackupServerIP
-If (($ApplianceID -ne -1) -And ($ApplianceID -ne NULL)) {
+If (($ApplianceID -ne -1) -And ($ApplianceID -ne $null)) {
   Copy-Item -LiteralPath $AgentConfigPath\ApplianceConfig.xml -Destination $AgentConfigPath\ApplianceConfig.xml.Good -Force
   Write-Host {Backed up ApplianceConfig.xml}
-  If ($BackupServerIP -ne "localhost") {
+  If (($BackupServerIP -ne "localhost") -And ($BackupServerIP -ne $null)) {
     Copy-Item -LiteralPath $AgentConfigPath\ServerConfig.xml -Destination $AgentConfigPath\ServerConfig.xml.Good -Force
     Write-Host {Backed up ServerConfig.xml}
   } Else {
@@ -48,7 +48,7 @@ If (($ApplianceID -ne -1) -And ($ApplianceID -ne NULL)) {
     Copy-Item -LiteralPath $AgentConfigPath\ApplianceConfig.xml -Destination $AgentConfigPath\ApplianceConfig.xml.Bad -Force
     Copy-Item -LiteralPath $AgentConfigPath\ApplianceConfig.xml.Good -Destination $AgentConfigPath\ApplianceConfig.xml -Force
     Write-Host {Restored ApplianceConfig.xml from good backup}
-    If ($BackupServerIP -ne "localhost") {
+    If (($BackupServerIP -ne "localhost") -And ($BackupServerIP -ne $null)) {
       Write-Host {Since ApplianceConfig.xml was bad, skipping backup of ServerConfig.xml}
     } Else {
       Write-Host {Rejected bad ServerConfig.xml}
